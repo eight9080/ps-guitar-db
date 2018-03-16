@@ -1,8 +1,11 @@
 package com.guitar.db;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -71,5 +74,15 @@ public class ModelPersistenceTests {
 	public void testGetModelsByType() throws Exception {
 		List<Model> mods = modelRepository.getModelsByType("Electric");
 		assertEquals(4, mods.size());
+	}
+
+	@Test
+	public void testGetModelsByTypes() throws Exception {
+		List<Model> mods = modelJpaRepository.findByModelTypeNameIn(Arrays.asList("Electric", "Acoustic"));
+		//assertEquals(4, mods.size());
+		mods.forEach((model)-> {
+			assertTrue(model.getModelType().getName().equals("Electric") ||
+					model.getModelType().getName().equals("Acoustic"));
+		});
 	}
 }

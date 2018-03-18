@@ -16,6 +16,7 @@ import com.guitar.db.repository.ModelJpaRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +54,16 @@ public class ModelPersistenceTests {
 		Model otherModel = modelJpaRepository.findOne(m.getId());
 		assertEquals("Test Model", otherModel.getName());
 		assertEquals(10, otherModel.getFrets());
-		
+
+		m.setName("UpdateName");
+		modelJpaRepository.saveAndFlush(m);
+		entityManager.clear();
+
+		Model upadateModel = modelJpaRepository.findOne(m.getId());
+		assertEquals("UpdateName", otherModel.getName());
+		assertEquals(10, otherModel.getFrets());
+
+
 		//delete BC location now
 		modelJpaRepository.delete(otherModel);
 	}
@@ -66,14 +76,15 @@ public class ModelPersistenceTests {
 
 	@Test
 	public void testGetModelsByPriceRangeAndWoodType() throws Exception {
-		List<Model> mods = modelRepository.getModelsByPriceRangeAndWoodType(BigDecimal.valueOf(1000L), BigDecimal.valueOf(2000L), "Maple");
-		assertEquals(3, mods.size());
+		Page<Model> mods = modelRepository.getModelsByPriceRangeAndWoodType(BigDecimal.valueOf(1000L), BigDecimal.valueOf(2000L), "Maple");
+		assertEquals(2, mods.getSize());
 	}
 
 	@Test
 	public void testGetModelsByType() throws Exception {
 		List<Model> mods = modelRepository.getModelsByType("Electric");
 		assertEquals(4, mods.size());
+		modelJpaRepository.aCustomMethod();
 	}
 
 	@Test

@@ -9,6 +9,7 @@
         <class>com.guitar.db.model.Location</class>
         <class>com.guitar.db.model.Manufacturer</class>
         <class>com.guitar.db.model.Model</class>
+        <class>com.guitar.db.model.User</class>
         <class>com.guitar.db.model.ModelType</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 

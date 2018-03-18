@@ -1,21 +1,27 @@
 package com.guitar.db.model;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
+import javax.persistence.*;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @NamedQuery(name="Model.findAllModelsByType", query="select m from Model m where m.modelType.name = :name")
 public class Model {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
+
+	@Version
+	private int version;
 
 	private String name;	
 	private BigDecimal price;
@@ -28,6 +34,20 @@ public class Model {
 
 	@ManyToOne
 	private ModelType modelType;
+
+	@CreatedBy
+	@ManyToOne
+	private User createdByUser;
+
+	@CreatedDate
+	private LocalDateTime createdDate;
+
+	@LastModifiedBy
+	@ManyToOne
+	private User lastModifiedByUser;
+
+	@LastModifiedDate
+	private LocalDateTime lastModifiedByDate;
 
 	public String getName() {
 		return name;
@@ -87,5 +107,37 @@ public class Model {
 
 	public Long getId() {
 		return id;
+	}
+
+	public User getCreatedByUser() {
+		return createdByUser;
+	}
+
+	public void setCreatedByUser(User createdByUser) {
+		this.createdByUser = createdByUser;
+	}
+
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public User getLastModifiedByUser() {
+		return lastModifiedByUser;
+	}
+
+	public void setLastModifiedByUser(User lastModifiedByUser) {
+		this.lastModifiedByUser = lastModifiedByUser;
+	}
+
+	public LocalDateTime getLastModifiedByDate() {
+		return lastModifiedByDate;
+	}
+
+	public void setLastModifiedByDate(LocalDateTime lastModifiedByDate) {
+		this.lastModifiedByDate = lastModifiedByDate;
 	}
 }

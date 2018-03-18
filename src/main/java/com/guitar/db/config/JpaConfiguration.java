@@ -3,10 +3,14 @@ package com.guitar.db.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.guitar.db.model.User;
+import com.guitar.db.security.SecurityAuditorAware;
 import org.hibernate.dialect.H2Dialect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -15,6 +19,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
+@EnableJpaAuditing
 public class JpaConfiguration {
 
 	@Value("#{dataSource}")
@@ -49,6 +54,11 @@ public class JpaConfiguration {
 		lef.setJpaPropertyMap(this.jpaProperties());
 		lef.setJpaVendorAdapter(this.jpaVendorAdapter());
 		return lef;
+	}
+
+	@Bean
+	public AuditorAware<User> auditorProvider(){
+		return new SecurityAuditorAware();
 	}
 
 }

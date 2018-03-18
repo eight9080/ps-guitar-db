@@ -2,8 +2,11 @@ delete model;
 delete modeltype;
 delete manufacturer;
 delete location;
+delete user;
 
 --alter table manufacturer add column active boolean not null;
+
+insert into user (id, name) values (1, 'TheUser');
 
 insert into location (id, country, state) values (1, 'United States', 'Alabama');
 insert into location (id, country, state) values (2, 'United States', 'Alaska');
